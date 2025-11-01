@@ -1,0 +1,818 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Believer Gate — Examination</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap');
+    
+    :root{
+      --bg-overlay: rgba(9,9,11,0.6);
+      --panel-bg: rgba(14,14,16,0.95);
+      --accent: #c3ed1d;
+      --accent-glow: rgba(195, 237, 29, 0.3);
+      --muted: #9aa0a6;
+      --glass: rgba(255,255,255,0.03);
+      --border: rgba(255,255,255,0.08);
+      color-scheme: dark;
+      font-family: 'Space Grotesk', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto;
+    }
+    
+    * { box-sizing: border-box; }
+    
+    html,body{
+      height:100%;
+      margin:0;
+      background:#000;
+      overflow-x:hidden;
+    }
+    
+    body{
+      background-image: url('a.jpg');
+      background-size: cover; 
+      background-position:center; 
+      background-attachment: fixed;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+      -webkit-font-smoothing:antialiased;
+      text-rendering:optimizeLegibility;
+      color:#e8e8e8;
+      position:relative;
+    }
+    
+    /* Animated gradient overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      animation: gradientShift 15s ease-in-out infinite;
+      pointer-events: none;
+    }
+    
+    @keyframes gradientShift {
+      0%, 100% { opacity: 0.3; transform: scale(1) rotate(0deg); }
+      50% { opacity: 0.5; transform: scale(1.1) rotate(5deg); }
+    }
+    
+    .veil{
+      position:fixed;
+      inset:0;
+      background:linear-gradient(180deg, rgba(0,0,0,0.6), rgba(0,0,0,0.85));
+      z-index: 0;
+    }
+    
+    .container{
+      position:relative;
+      max-width:1120px;
+      width:100%;
+      z-index:2;
+    }
+    
+    /* Header */
+    .top{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:16px;
+      margin-bottom:32px;
+      animation: fadeInDown 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .logo{
+      height:80px;
+      filter: drop-shadow(0 0 20px var(--accent-glow));
+      animation: float 6s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    h1{
+      font-size:48px;
+      letter-spacing:0.03em;
+      margin:0;
+      font-weight:700;
+      background: linear-gradient(135deg, #fff 0%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: 0 0 40px var(--accent-glow);
+    }
+    
+    .subtle{
+      color:var(--muted);
+      font-size:14px;
+      font-weight:500;
+    }
+    
+    .subtle a {
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.3s ease;
+      position: relative;
+    }
+    
+    .subtle a::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--accent);
+      transition: width 0.3s ease;
+    }
+    
+    .subtle a:hover {
+      color: var(--accent);
+    }
+    
+    .subtle a:hover::after {
+      width: 100%;
+    }
+
+    /* Panel with glassmorphism */
+    .panel{
+      background: var(--panel-bg);
+      border-radius:20px;
+      padding:40px;
+      box-shadow:
+        0 20px 60px rgba(0,0,0,0.8),
+        inset 0 1px 0 rgba(255,255,255,0.06);
+      border: 1px solid var(--border);
+      display:flex;
+      gap:40px;
+      align-items:flex-start;
+      backdrop-filter: blur(20px);
+      animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    /* Animated border glow */
+    .panel::before {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border-radius: 20px;
+      padding: 2px;
+      background: linear-gradient(135deg, var(--accent), transparent, var(--accent));
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      opacity: 0.3;
+      animation: borderRotate 6s linear infinite;
+    }
+    
+    @keyframes borderRotate {
+      to { transform: rotate(360deg); }
+    }
+    
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .left{flex:1;min-width:320px;position:relative;z-index:1;}
+    .right{width:480px;max-width:46%;min-width:320px;position:relative;z-index:1;}
+
+    label{
+      font-size:13px;
+      font-weight:600;
+      color:var(--muted);
+      display:block;
+      margin-bottom:10px;
+      text-transform:uppercase;
+      letter-spacing:0.05em;
+    }
+    
+    .input{
+      display:flex;
+      gap:12px;
+      margin-bottom:12px;
+    }
+    
+    input[type=text]{
+      flex:1;
+      padding:16px 18px;
+      border-radius:12px;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,0.02);
+      color:inherit;
+      font-size:15px;
+      font-family: 'Space Grotesk', monospace;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      backdrop-filter: blur(10px);
+    }
+    
+    input[type=text]:focus{
+      outline:none;
+      border-color:var(--accent);
+      background:rgba(255,255,255,0.04);
+      box-shadow: 0 0 0 3px var(--accent-glow), 0 8px 24px rgba(0,0,0,0.4);
+      transform: translateY(-2px);
+    }
+    
+    button.cta{
+      padding:16px 24px;
+      border-radius:12px;
+      border:0;
+      background:linear-gradient(135deg, var(--accent) 0%, #a8c918 100%);
+      cursor:pointer;
+      font-weight:700;
+      font-size:14px;
+      color:#000;
+      text-transform:uppercase;
+      letter-spacing:0.05em;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 16px rgba(195, 237, 29, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    button.cta::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, transparent, rgba(255,255,255,0.3), transparent);
+      transform: translateX(-100%);
+      transition: transform 0.6s ease;
+    }
+    
+    button.cta:hover::before {
+      transform: translateX(100%);
+    }
+    
+    button.cta:hover{
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(195, 237, 29, 0.5);
+    }
+    
+    button.cta:active{
+      transform:translateY(0);
+    }
+
+    .note{
+      font-size:13px;
+      color:var(--muted);
+      margin-top:12px;
+      line-height:1.6;
+    }
+
+    /* Analysis view with enhanced effects */
+    .analysis{
+      min-height:380px;
+      padding:24px;
+      border-radius:16px;
+      background:linear-gradient(135deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+      border:1px solid var(--border);
+      overflow:hidden;
+      position:relative;
+      backdrop-filter: blur(10px);
+    }
+    
+    .analysis::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+      opacity: 0;
+      animation: pulseGlow 4s ease-in-out infinite;
+    }
+    
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0; transform: scale(0.8); }
+      50% { opacity: 0.15; transform: scale(1); }
+    }
+    
+    .criteria{
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      position:relative;
+      z-index:1;
+    }
+    
+    .criterion{
+      opacity:0;
+      transform:translateX(-20px);
+      transition:all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:16px 18px;
+      border-radius:12px;
+      background:linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border:1px solid rgba(255,255,255,0.04);
+      backdrop-filter: blur(10px);
+      position:relative;
+      overflow:hidden;
+    }
+    
+    .criterion::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: var(--accent);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    .criterion:hover::before {
+      opacity: 1;
+    }
+    
+    .criterion.show{
+      opacity:1;
+      transform:none;
+    }
+    
+    .criterion:hover {
+      background:linear-gradient(135deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+      border-color:rgba(255,255,255,0.08);
+      transform: translateX(4px);
+    }
+    
+    .crit-name{
+      font-weight:600;
+      color:#e8e8e8;
+      font-size:15px;
+      margin-bottom:4px;
+    }
+    
+    .crit-val{
+      font-family: 'Space Grotesk', ui-monospace, monospace;
+      color:var(--accent);
+      font-size:14px;
+      font-weight:600;
+    }
+
+    .microchart{
+      height:24px;
+      width:70px;
+      background:linear-gradient(90deg, rgba(195,237,29,0.1), rgba(195,237,29,0.02));
+      border-radius:6px;
+      margin-left:12px;
+      border:1px solid rgba(195,237,29,0.2);
+      position:relative;
+      overflow:hidden;
+    }
+    
+    .microchart::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(195,237,29,0.3), transparent);
+      animation: shimmer 2s ease-in-out infinite;
+    }
+    
+    @keyframes shimmer {
+      0%, 100% { transform: translateX(-100%); }
+      50% { transform: translateX(100%); }
+    }
+
+    /* Result card with dramatic reveal */
+    .result{
+      margin-top:24px;
+      padding:28px;
+      border-radius:16px;
+      background:linear-gradient(135deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+      border:1px solid var(--border);
+      position:relative;
+      overflow:hidden;
+      backdrop-filter: blur(10px);
+    }
+    
+    .result::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent), transparent);
+    }
+    
+    .result h2{
+      margin:0;
+      font-size:28px;
+      font-weight:700;
+      letter-spacing:0.02em;
+    }
+    
+    .result .verdict{
+      margin-top:16px;
+      font-weight:700;
+      font-size:18px;
+      letter-spacing:0.1em;
+      text-transform:uppercase;
+    }
+    
+    .verdict.believer{
+      color:var(--accent);
+      text-shadow: 0 0 20px var(--accent-glow);
+      animation: glowPulse 2s ease-in-out infinite;
+    }
+    
+    @keyframes glowPulse {
+      0%, 100% { text-shadow: 0 0 20px var(--accent-glow); }
+      50% { text-shadow: 0 0 30px var(--accent-glow), 0 0 40px var(--accent-glow); }
+    }
+    
+    .verdict.not{
+      color:#ff6b6b;
+      text-shadow: 0 0 20px rgba(255,107,107,0.3);
+    }
+    
+    .actions{
+      display:flex;
+      gap:12px;
+      margin-top:20px;
+      flex-wrap:wrap;
+    }
+    
+    .btn-ghost{
+      background:rgba(255,255,255,0.02);
+      border:1px solid var(--border);
+      padding:12px 18px;
+      border-radius:10px;
+      color:var(--muted);
+      font-weight:600;
+      font-size:13px;
+      cursor:pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      text-transform:uppercase;
+      letter-spacing:0.05em;
+    }
+    
+    .btn-ghost:hover {
+      background:rgba(255,255,255,0.04);
+      border-color:rgba(255,255,255,0.12);
+      color:#fff;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    footer.dev{
+      margin-top:24px;
+      font-size:12px;
+      color:var(--muted);
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      opacity:0.7;
+      transition: opacity 0.3s ease;
+    }
+    
+    footer.dev:hover {
+      opacity:1;
+    }
+
+    /* Reveal animation */
+    .reveal{
+      animation:reveal 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+    
+    @keyframes reveal{
+      from{transform:translateY(20px) scale(0.95);opacity:0}
+      to{transform:none;opacity:1}
+    }
+    
+    /* Session log styling */
+    .log-container {
+      background:rgba(0,0,0,0.3);
+      padding:20px;
+      border-radius:12px;
+      min-height:280px;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.7;
+      font-family: 'Space Grotesk', monospace;
+      border:1px solid rgba(255,255,255,0.04);
+      backdrop-filter: blur(10px);
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.3);
+    }
+    
+    .log-container::before {
+      content: '>';
+      color: var(--accent);
+      margin-right: 8px;
+      opacity: 0.5;
+    }
+
+    /* Responsive */
+    @media (max-width:980px){
+      .panel{flex-direction:column;padding:32px;}
+      .right{width:100%;max-width:none;}
+      h1{font-size:36px;}
+      .logo{height:64px;}
+    }
+    
+    @media (max-width:640px){
+      h1{font-size:28px;}
+      .panel{padding:24px;}
+      .input{flex-direction:column;}
+      button.cta{width:100%;}
+    }
+    
+    /* Scrollbar styling */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: rgba(255,255,255,0.02);
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: rgba(195,237,29,0.3);
+      border-radius: 4px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(195,237,29,0.5);
+    }
+  </style>
+</head>
+<body>
+  <div class="veil"></div>
+  <div class="container" id="app">
+    <div class="top">
+      <img src="https://i.imgur.com/placeholder-logo.png" class="logo" alt="Believer Gate logo"/>
+      <h1>Believer Gate</h1>
+      <div class="subtle"><a href="https://x.com/BelieverGate" target="_blank" style="display:flex;align-items:center;gap:6px"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>@BelieverGate</a></div>
+    </div>
+
+    <div class="panel" role="main" aria-labelledby="believer-title">
+      <div class="left">
+        <div style="margin-bottom:20px;color:var(--muted);font-size:14px;line-height:1.6">Ritual Examination — Submit a Solana wallet for assessment. This demonstration is a client-side simulation (pumpfun mode).</div>
+
+        <div class="input-area">
+          <label for="wallet">Wallet address (Solana)</label>
+          <div class="input">
+            <input id="wallet" type="text" placeholder="Paste wallet address here" autocomplete="off" spellcheck="false" />
+            <button id="analyze" class="cta">Analyze</button>
+          </div>
+          <div id="error" class="note" aria-live="polite" style="color:#ff6b6b;display:none"></div>
+          <div class="note">Example: A valid base58 Solana address (43–45 chars). This is a demonstration — no on‑chain queries are performed in Pumpfun mode.</div>
+        </div>
+
+        <div style="margin-top:24px">
+          <div class="analysis" id="analysis">
+            <div id="analysis-intro" style="opacity:1;transition:opacity 400ms;position:relative;z-index:1">
+              <div style="font-weight:600;margin-bottom:12px;font-size:16px">Examination Pending</div>
+              <div class="subtle">Awaiting wallet submission to begin the ritual.</div>
+            </div>
+
+            <div id="criteria" class="criteria" style="margin-top:16px"></div>
+
+            <div id="result" class="result" style="display:none"></div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="right">
+        <div style="font-size:13px;color:var(--muted);margin-bottom:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em">Session Log</div>
+        <div class="log-container" id="log">Ready for examination</div>
+
+        <div style="margin-top:20px">
+          <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+            <button class="btn-ghost" id="copySummary">Copy Summary</button>
+            <button class="btn-ghost" id="tweetResult">Tweet Result</button>
+          </div>
+          <div style="margin-top:14px;font-size:12px;color:var(--muted);line-height:1.6">You may retry with another wallet at any time. Pumpfun mode can be disabled in the footer for production wiring.</div>
+        </div>
+      </div>
+
+    </div>
+
+    <footer class="dev">
+      <div>Pumpfun mode — client-side only</div>
+      <div style="font-size:12px;color:var(--muted)">Seed: <span id="seedDisplay">—</span></div>
+    </footer>
+  </div>
+
+
+<script>
+// --- Utility functions ---
+function simpleBase58Check(s){
+  if(!s || typeof s !== 'string') return false;
+  const trimmed = s.trim();
+  return /^[A-HJ-NP-Za-km-z1-9]+$/.test(trimmed) && trimmed.length >= 32 && trimmed.length <= 50;
+}
+
+function nowIso(){ return new Date().toISOString(); }
+
+function log(msg){ 
+  const el = document.getElementById('log'); 
+  const timestamp = new Date().toLocaleTimeString('en-US', { hour12: false });
+  el.innerHTML = `<div style="margin-bottom:8px;opacity:0;animation:fadeIn 0.3s ease forwards"><span style="color:var(--accent);opacity:0.6">[${timestamp}]</span> ${msg}</div>` + el.innerHTML; 
+}
+
+function hashStringToNumber(str){
+  let h = 5381;
+  for(let i=0;i<str.length;i++) h = ((h<<5) + h) + str.charCodeAt(i) | 0;
+  return Math.abs(h);
+}
+
+function seededRandom(seed){
+  let s = seed >>> 0;
+  return function(){ s = (s * 1664525 + 1013904223) >>> 0; return s / 4294967296; }
+}
+
+function maskWallet(w){ if(!w) return ''; return w.slice(0,4) + '…' + w.slice(-4); }
+
+// --- Criteria generator ---
+const CRITERIA_POOL = [
+  {id:'age', name:'Wallet Age', gen: () => { const years = Math.floor(Math.random()*6); const months = Math.floor(Math.random()*12); return `${years}y ${months}m — ${years>=1? 'established':'recent'}` }},
+  {id:'liquidity', name:'Liquidity Contribution', gen: () => { const opts=['Low','Medium','High']; return opts[Math.floor(Math.random()*opts.length)]; }},
+  {id:'depth', name:'Interaction Depth', gen: () => Math.floor(Math.random()*900 + 3) + ' contracts'},
+  {id:'pump', name:'Pump Participation', gen: () => Math.floor(Math.random()*20)},
+  {id:'rug', name:'Rug Susceptibility Index', gen: () => (Math.random()*0.8).toFixed(2)},
+  {id:'airdrop', name:'Airdrop Hunter', gen: () => (Math.random()>0.65? 'probable':'unlikely')},
+  {id:'holding', name:'Holding Pattern', gen: () => { const opts=['hodl','swing','scalp']; return opts[Math.floor(Math.random()*opts.length)]; }},
+  {id:'reputation', name:'On-chain Reputation', gen: () => { const opts=['neutral','flagged','validated']; return opts[Math.floor(Math.random()*opts.length)]; }},
+  {id:'txfreq', name:'Transaction Frequency', gen: () => Math.floor(Math.random()*240) + ' / mo'},
+  {id:'tokendiv', name:'Token Diversity', gen: () => Math.floor(Math.random()*120) + ' tokens'},
+];
+
+// --- Main flow ---
+const analyzeBtn = document.getElementById('analyze');
+const walletInput = document.getElementById('wallet');
+const errorEl = document.getElementById('error');
+const criteriaEl = document.getElementById('criteria');
+const resultEl = document.getElementById('result');
+const seedDisplay = document.getElementById('seedDisplay');
+let lastSummary = null;
+
+function resetView(){ 
+  criteriaEl.innerHTML=''; 
+  resultEl.style.display='none'; 
+  errorEl.style.display='none'; 
+  document.getElementById('analysis-intro').style.opacity = '1'; 
+}
+
+function startAnalysis(address){
+  resetView();
+  document.getElementById('analysis-intro').style.opacity = '0.0';
+  log('Examination initialized for ' + maskWallet(address));
+
+  const timeSlice = new Date();
+  const seedSource = address.trim() + '|' + timeSlice.toISOString().slice(0,16);
+  const seedNum = hashStringToNumber(seedSource);
+  seedDisplay.textContent = seedNum;
+
+  const rnd = seededRandom(seedNum);
+
+  const pool = CRITERIA_POOL.slice();
+  for(let i=pool.length-1;i>0;i--){ const j=Math.floor(rnd()*(i+1)); [pool[i],pool[j]]=[pool[j],pool[i]] }
+  const count = 6 + Math.floor(rnd()*4);
+  const chosen = pool.slice(0,count);
+
+  let idx = 0;
+  const baseInterval = 2200;
+
+  function revealNext(){
+    if(idx >= chosen.length){
+      setTimeout(() => revealVerdict(rnd, address, seedNum), 900);
+      return;
+    }
+    const c = chosen[idx];
+    const el = document.createElement('div'); 
+    el.className='criterion';
+    el.innerHTML = '<div><div class="crit-name">' + c.name + '</div><div class="subtle" style="font-size:12px">evaluating…</div></div>' +
+                   '<div style="display:flex;align-items:center"><div class="crit-val">—</div></div>';
+    criteriaEl.appendChild(el);
+    requestAnimationFrame(()=> setTimeout(()=> el.classList.add('show'), 40));
+
+    setTimeout(()=>{
+      const val = c.gen();
+      const valNode = el.querySelector('.crit-val');
+      valNode.textContent = typeof val === 'string' || typeof val === 'number' ? val : JSON.stringify(val);
+      const m = document.createElement('div'); 
+      m.className='microchart'; 
+      el.querySelector('div[style]')?.appendChild(m);
+      log(c.name + ': ' + val);
+    }, 600 + Math.floor(rnd()*500));
+
+    idx++;
+    const jitter = Math.floor(rnd()*800);
+    setTimeout(revealNext, baseInterval + jitter);
+  }
+
+  revealNext();
+}
+
+function revealVerdict(rnd, address, seedNum){
+  const roll = rnd();
+  const isBeliever = roll < 0.7;
+  log('Final roll: ' + roll.toFixed(4) + ' — ' + (isBeliever? 'Believer':'Not Believer'));
+
+  resultEl.style.display='block'; 
+  resultEl.classList.add('reveal');
+  resultEl.innerHTML = '';
+
+  const title = document.createElement('h2'); 
+  title.textContent = isBeliever ? 'Believer — Access Granted' : 'Not Believer — Access Denied';
+  
+  const desc = document.createElement('div'); 
+  desc.className='subtle'; 
+  desc.style.marginTop='8px';
+  desc.textContent = isBeliever ? 'Assessment complete — the gate recognises your conviction.' : 'Assessment complete — the gate remains closed to this soul.';
+  
+  const verdict = document.createElement('div'); 
+  verdict.className='verdict ' + (isBeliever? 'believer':'not'); 
+  verdict.textContent = isBeliever ? 'VERDICT: BELIEVER' : 'VERDICT: NOT BELIEVER';
+
+  const badge = document.createElement('div'); 
+  badge.style.marginTop='16px'; 
+  if(isBeliever){ 
+    badge.innerHTML = '<img src="badge.png" alt="badge" style="height:48px;filter:drop-shadow(0 0 12px var(--accent-glow))">'; 
+  }
+
+  const actions = document.createElement('div'); 
+  actions.className='actions';
+  
+  const retry = document.createElement('button'); 
+  retry.className='btn-ghost'; 
+  retry.textContent='Retry'; 
+  retry.onclick = ()=>{ resetView(); }
+  
+  const copy = document.createElement('button'); 
+  copy.className='btn-ghost'; 
+  copy.textContent='Save Result'; 
+  copy.onclick = ()=> copySummary(address, isBeliever, seedNum);
+  
+  actions.appendChild(copy); 
+  actions.appendChild(retry);
+
+  resultEl.appendChild(title); 
+  resultEl.appendChild(desc); 
+  resultEl.appendChild(verdict); 
+  resultEl.appendChild(badge); 
+  resultEl.appendChild(actions);
+
+  lastSummary = {
+    wallet: address,
+    masked: maskWallet(address),
+    result: isBeliever ? 'Believer' : 'Not Believer',
+    roll: roll,
+    timestamp: nowIso(),
+    seed: seedNum
+  };
+}
+
+function copySummary(address, isBeliever, seedNum){
+  if(!lastSummary){ alert('No result to copy'); return; }
+  const txt = `Believer Gate Result — ${lastSummary.result}\nWallet: ${lastSummary.masked}\nTime: ${lastSummary.timestamp}\nSeed: ${lastSummary.seed}`;
+  navigator.clipboard?.writeText(txt).then(()=> alert('Result summary copied to clipboard'));
+}
+
+const tweetBtn = document.getElementById('tweetResult');
+tweetBtn.addEventListener('click', ()=>{
+  if(!lastSummary){ alert('No result to tweet yet. Run an analysis first.'); return; }
+  const text = `Believer Gate — ${lastSummary.result} | ${lastSummary.masked} | ${lastSummary.timestamp}`;
+  const url = 'https://x.com/intent/tweet?text=' + encodeURIComponent(text);
+  window.open(url,'_blank');
+});
+
+document.getElementById('copySummary').addEventListener('click', ()=>{
+  if(!lastSummary){ alert('No result to copy yet. Run an analysis first.'); return; }
+  const txt = `Believer Gate — ${lastSummary.result} | ${lastSummary.masked} | ${lastSummary.timestamp}`;
+  navigator.clipboard?.writeText(txt).then(()=> alert('Summary copied'));
+});
+
+analyzeBtn.addEventListener('click', ()=>{
+  const addr = walletInput.value.trim();
+  if(!simpleBase58Check(addr)){
+    errorEl.style.display='block'; 
+    errorEl.textContent = 'Invalid Solana address format. Ensure a base58 address (32–50 chars).';
+    log('Validation failed for input');
+    return;
+  }
+  errorEl.style.display='none';
+  startAnalysis(addr);
+});
+
+walletInput.addEventListener('keydown', (e)=>{ if(e.key === 'Enter') analyzeBtn.click(); });
+walletInput.focus();
+</script>
+</body>
+</html>
